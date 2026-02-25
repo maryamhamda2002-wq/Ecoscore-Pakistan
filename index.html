@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoScore Pakistan</title>
+
+<!-- Professional Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* Base Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f7fa; /* light neutral background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Container Card */
+.container {
+    background: #ffffff;
+    padding: 40px 35px;
+    width: 450px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* Heading */
+h2 {
+    margin-bottom: 30px;
+    color: #1f2937; /* dark gray */
+    font-weight: 600;
+    font-size: 24px;
+}
+
+/* Input Groups */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.input-group label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+input, select {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 6px rgba(59,130,246,0.25);
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 14px;
+    background: #3b82f6; /* professional blue */
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+/* Result Display */
+.result {
+    margin-top: 25px;
+    font-size: 42px;
+    font-weight: 600;
+    background: #e5e7eb;
+    color: #111827;
+    padding: 18px;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.result.animate {
+    transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .container {
+        width: 90%;
+        padding: 30px 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>EcoScore Calculator</h2>
+
+    <div class="input-group">
+        <label>Public Transport Days/Week</label>
+        <input type="number" id="publicTransport" placeholder="0-7">
+    </div>
+
+    <div class="input-group">
+        <label>Flights per Year</label>
+        <input type="number" id="flights" placeholder="0">
+    </div>
+
+    <div class="input-group">
+        <label>Meat Meals per Week</label>
+        <input type="number" id="meatMeals" placeholder="0">
+    </div>
+
+    <div class="input-group">
+        <label>Monthly Electricity (kWh)</label>
+        <input type="number" id="electricity" placeholder="0">
+    </div>
+
+    <div class="input-group">
+        <label>Recycling %</label>
+        <input type="number" id="recycling" placeholder="0-100">
+    </div>
+
+    <div class="input-group">
+        <label>Heating Type</label>
+        <select id="heating">
+            <option>Gas</option>
+            <option>Electric</option>
+            <option>Solar</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Shopping Frequency</label>
+        <select id="shopping">
+            <option>Frequent</option>
+            <option>Occasional</option>
+            <option>Rare</option>
+        </select>
+    </div>
+
+    <button onclick="calculateEcoScore()">Calculate EcoScore</button>
+
+    <div class="result" id="ecoScore">0</div>
+</div>
+
+<script>
+function calculateEcoScore() {
+    let score = 100;
+
+    let publicTransport = parseFloat(document.getElementById("publicTransport").value) || 0;
+    let flights = parseFloat(document.getElementById("flights").value) || 0;
+    let meatMeals = parseFloat(document.getElementById("meatMeals").value) || 0;
+    let electricity = parseFloat(document.getElementById("electricity").value) || 0;
+    let recycling = parseFloat(document.getElementById("recycling").value) || 0;
+
+    let heating = document.getElementById("heating").value;
+    let shopping = document.getElementById("shopping").value;
+
+    // Calculation logic
+    score -= (7 - publicTransport) * 2;
+    score -= flights * 5;
+    score -= meatMeals * 1.5;
+    score -= electricity * 0.03;
+    score += recycling * 0.2;
+
+    if (heating === "Gas") score -= 5;
+    else if (heating === "Electric") score -= 3;
+    else if (heating === "Solar") score += 5;
+
+    if (shopping === "Frequent") score -= 5;
+    else if (shopping === "Occasional") score -= 2;
+
+    score = Math.max(0, Math.min(100, score));
+
+    const resultDiv = document.getElementById("ecoScore");
+    resultDiv.innerText = Math.round(score);
+
+    // Animate
+    resultDiv.classList.add("animate");
+    setTimeout(() => resultDiv.classList.remove("animate"), 300);
+}
+</script>
+
+</body>
+</html>
